@@ -13,12 +13,9 @@ uint32_t swap_endian(uint32_t val) {
 }
 
 void load_mnist(const char *img_path, const char *label_path, uint32_t *NUM_IMGS, uint32_t *NUM_LABELS,
-		uint32_t *NUM_COLS, uint32_t *NUM_ROWS, uint32_t *NUM_PIXELS, uint32_t *NUM_BYTES,
-		uint8_t *images){
+  uint32_t *NUM_COLS, uint32_t *NUM_ROWS, uint32_t *NUM_PIXELS, uint32_t *NUM_BYTES,
+	uint8_t *images){
 
-#if MNIST_DEBUG==3
-  cout<<"In load_mnist()"<<endl;
-#endif
   uint32_t magic;
 
   // Open files
@@ -63,19 +60,9 @@ void load_mnist(const char *img_path, const char *label_path, uint32_t *NUM_IMGS
 
   // useful calculations
   *NUM_PIXELS = *NUM_ROWS * *NUM_COLS;
-//  *IMG_BYTES = *NUM_PIXELS * sizeof(uint8_t);
   *NUM_BYTES = (*NUM_IMGS) * *NUM_PIXELS * sizeof(uint8_t);
     
-  // reallocate dataset memory
-  //  images = (uint8_t**) malloc(*DATASET_BYTES);
-  //images = realloc(images, *DATASET_BYTES);
- /*
-  for(int i=0; i < *NUM_IMGS; i++){
-    uint8_t *temp_image = (uint8_t*) malloc(*IMG_BYTES);
-    image_file.read(reinterpret_cast<char*>(temp_image),*NUM_PIXELS);
-    images[i]=temp_image;
-*/
-image_file.read(reinterpret_cast<char*>(images),*NUM_BYTES);
+  image_file.read(reinterpret_cast<char*>(images),*NUM_BYTES);
 
 #if MNIST_DEBUG == 1
     string color;
@@ -95,11 +82,9 @@ image_file.read(reinterpret_cast<char*>(images),*NUM_BYTES);
     }
 #endif
     
-  //}
   printf("\u001b[0m");//reset terminal
   cout<<endl;
   cout<<"num of images: "<<*NUM_IMGS<<endl;
   cout<<"num of labels: "<<*NUM_LABELS<<endl;
   cout<<"image rows: "<<*NUM_ROWS<<", image cols: "<<*NUM_COLS<<endl;
-
 }
