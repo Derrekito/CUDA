@@ -15,23 +15,17 @@
 
 using namespace std;
 
-__global__ void getback(uint8_t *device_in, uint8_t *device_out, int NUM_ELM) {
-  /*
-  int idx = threadIdx.x;
-  if (idx < NUM_ELM){
-    //device_out[idx] = device_in[idx];
-    *(device_out + idx) = *(device_in + idx);
-  }*/
-
-  for(int i=0; i < NUM_ELM; i++){
-    *(device_out + i) = *(device_in + i);
+__global__ void getback(uint8_t *device_in, uint8_t *device_out, int NUM_ELM) {  
+  int idx = blockIdx.x*blockDim.x + threadIdx.x;
+  if(idx < NUM_ELM){
+    device_out[idx] = device_in[idx];
   }
 }
 
 int main(){
-  const int NUM_THREADS = 1;
-  const int NUM_BLOCKS = 1;
-  const int NUM_ELM = 1024;
+  const int NUM_THREADS = 1024;
+  const int NUM_BLOCKS = 2;
+  const int NUM_ELM = 2048;
   const int NUM_BYTES = NUM_ELM * sizeof(uint8_t);
 
   uint8_t *host_in = (uint8_t*) malloc(NUM_BYTES);
@@ -57,7 +51,7 @@ int main(){
 #endif
 
   cudaMemcpy(device_in, host_in, NUM_BYTES, cudaMemcpyHostToDevice);
-//  cudaMemcpy(device_out, device_in, NUM_BYTES, cudaMemcpyDeviceToDevice);
+//  cudaMemcpy(device_out, device_in, NUM_BYTES, cudaMemcpyDeviceToDevice); // copy pointers bypassing global function
   getback<<<NUM_BLOCKS,NUM_THREADS>>>(device_in, device_out, NUM_ELM);
 
   cudaMemcpy(host_out, device_out, NUM_BYTES, cudaMemcpyDeviceToHost);
