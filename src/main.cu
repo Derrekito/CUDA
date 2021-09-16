@@ -16,10 +16,10 @@ using namespace std;
 
 __global__ void getback(uint8_t *device_in, uint8_t *device_out, int NUM_IMGS, int NUM_PIXELS) {  
   /*
-  int idx = 784*(blockIdx.x*blockDim.x + threadIdx.x);
+  int idx = NUM_PIXELS*(blockIdx.x*blockDim.x + threadIdx.x);
   if(idx < NUM_IMGS){
     for(int i=0; i< NUM_PIXELS;i++){
-      device_out[idx+i] = 255;//device_in[idx+i];
+      device_out[idx+i] = device_in[idx+i];
     }
   }*/
   for(int i=0;i<NUM_IMGS * NUM_PIXELS; i++){
@@ -34,15 +34,9 @@ int main(int argc, char **argv){
 
 //  const int NUM_THREADS = 1024;
 //  const int NUM_BLOCKS = 59;
-const int NUM_THREADS = 1;
-const int NUM_BLOCKS = 1;
-  /*
-  const int NUM_IMGS = 60000;
-  const int NUM_COLS = 28;
-  const int NUM_ROWS = 28;
-  const int NUM_PIXELS = NUM_COLS * NUM_ROWS;
-  const int NUM_BYTES = NUM_IMGS * NUM_PIXELS * sizeof(uint8_t);
-*/
+  const int NUM_THREADS = 1;
+  const int NUM_BLOCKS = 1;
+
   uint32_t *NUM_IMGS = (uint32_t*) malloc(sizeof(uint32_t));
   uint32_t *NUM_LABELS = (uint32_t*) malloc(sizeof(uint32_t));
   uint32_t *NUM_COLS = (uint32_t*) malloc(sizeof(uint32_t));
@@ -72,7 +66,7 @@ const int NUM_BLOCKS = 1;
 
   cudaMemcpy(device_in, host_in, *NUM_BYTES, cudaMemcpyHostToDevice);
   //cudaMemcpy(device_out, device_in, *NUM_BYTES, cudaMemcpyDeviceToDevice); // copy pointers bypassing global function
-  //getback<<<NUM_BLOCKS,NUM_THREADS>>>(device_in, device_out, *NUM_COLS, *NUM_ROWS);
+  getback<<<NUM_BLOCKS,NUM_THREADS>>>(device_in, device_out, *NUM_IMGS, *NUM_PIXELS);
   //cudaMemcpy(host_out, device_in, *NUM_BYTES, cudaMemcpyDeviceToHost); // copy pointers bypassing device_out 
   cudaMemcpy(host_out, device_out, *NUM_BYTES, cudaMemcpyDeviceToHost);
 
