@@ -41,11 +41,9 @@ int main(int argc, char **argv){
   uint32_t *NUM_PIXELS = (uint32_t*) malloc(sizeof(uint32_t));
   uint32_t *NUM_BYTES = (uint32_t*) malloc(sizeof(uint32_t));
 
-  uint8_t *host_in = (uint8_t*) malloc(60000*28*28*sizeof(uint8_t)); // change this so memory size is determined by read file values
-
   // load host_in with the dataset
-  load_mnist(img_path.c_str(), label_path.c_str(), NUM_IMGS, NUM_LABELS, NUM_COLS, 
-             NUM_ROWS, NUM_PIXELS, NUM_BYTES, host_in);
+  uint8_t *host_in = load_mnist(img_path.c_str(), label_path.c_str(), NUM_IMGS, NUM_LABELS, NUM_COLS, 
+             NUM_ROWS, NUM_PIXELS, NUM_BYTES);
 
   uint8_t *host_out = (uint8_t*) malloc(*NUM_BYTES); 
 
