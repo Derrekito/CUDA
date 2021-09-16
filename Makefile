@@ -51,8 +51,9 @@ all: clean build
 
 build: 
 	mkdir -p ${BUILD_PATH}
+	mkdir -p ${EXEC_PATH}
 	#$(NVCC) ${CPU_SOURCE_FILES} ${GPU_SOURCE_FILES} -lineinfo -o ${BUILD_PATH}/${TARGET}
-	$(NVCC) ./src/main.cu -lineinfo -o ${BUILD_PATH}/${TARGET}
+	$(NVCC) ./src/main.cu -lineinfo -o ${EXEC_PATH}/${TARGET}
 
 run: 
 	./${BUILD_PATH}/${TARGET}
