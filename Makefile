@@ -56,7 +56,7 @@ build:
 	$(NVCC) ./src/main.cu -lineinfo -o ${EXEC_PATH}/${TARGET}
 
 run: 
-	./${BUILD_PATH}/${TARGET}
+	./${EXEC_PATH}/${TARGET}
 
 clean:
 	rm -rf ${BUILD_PATH}
